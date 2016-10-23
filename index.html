@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <title>html5 canvas</title>
+
+    <style>
+        #myCanvas {
+            width: 400px;
+            height:200px;
+            border:1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+<canvas id="myCanvas"></canvas>
+
+<script>
+    let myCanvas = document.getElementById('myCanvas');
+
+    let ctx = myCanvas.getContext('2d');
+
+    /*
+    * 绘制直线
+    * */
+    ctx.beginPath();//表示开始绘制路径
+    ctx.moveTo(10,10);//开始位置
+    ctx.lineTo(200,20);//结束位置
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = '#ccc';//设置线条颜色
+    ctx.stroke();//进行线的着色，使它能看见
+
+    /*
+    * 绘制矩形
+    * */
+    ctx.fillStyle = 'yellow';//设置颜色
+    ctx.fillRect(50,50,200,100);//fillRect(x, y, width, height)方法用来绘制矩形
+//    ctx.strokeRect(50,50,200,100);//绘制空心矩形
+//    ctx.clearRect(100,50,50,50);//用于清除某个矩形内的内容
+
+    /*
+    * 绘制文本
+    * */
+    ctx.font = 'Bold 20px Arial';
+    ctx.textAlign =  'left';
+    ctx.fillStyle = 'green';
+    ctx.fillText('吴晗',20,20);
+//    ctx.strokeText('wuhan',30,30);//设置空心字
+
+    /*
+    * 绘制圆形和扇形
+    * */
+    ctx.beginPath();
+    ctx.arc(100,100,50,0,Math.PI*1.5,false);//arc(x坐标，y坐标，半径，开始弧度，终止弧度，顺时针（false）或者逆时针（true）)
+    ctx.fillStyle= '#000';
+    ctx.fill();
+
+    /*
+    * 设置渐变色
+    * */
+    let myGradient = ctx.createLinearGradient(0,0,0,90);//createLinearGradient(起始x坐标，起始y坐标，结束x坐标，结束y坐标)
+    myGradient.addColorStop(0, "#BABABA");
+    myGradient.addColorStop(1, "#000");
+
+    ctx.fillStyle = myGradient;
+    ctx.fillRect(10,10,200,100);
+
+    /*
+    * 设置阴影
+    * */
+    ctx.shadowOffsetX = 1;
+    ctx.shadowOffsetY = 1;
+    ctx.shadowBlur = 5;
+    ctx.shadowColor = 'red';
+
+    ctx.fillStyle = "#CC0000";
+    ctx.fillRect(5,5,20,10);
+
+
+    /*
+    * 动画
+    * */
+    var posX = 20,
+            posY = 100;
+
+    setInterval(function() {
+        ctx.fillStyle = "black";
+        ctx.fillRect(0,0,ctx.width, ctx.height);
+
+        posX += 1;
+        posY += 0.25;
+
+        ctx.beginPath();
+        ctx.fillStyle = "white";
+
+        ctx.arc(posX, posY, 10, 0, Math.PI*2, true);
+        ctx.closePath();
+        ctx.fill();
+    }, 30);
+</script>
+</body>
+</html>

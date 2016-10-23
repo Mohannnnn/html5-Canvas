@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <title></title>
+</head>
+<body>
+<style>
+    .clocks {
+        height: 500px;
+        width:500px;
+        position: relative;
+        margin: 25px auto;
+    }
+    #canvas {
+        /*width: 500px;*/
+        /*height:500px;*/
+        /*border:1px solid #ccc;*/
+    }
+</style>
+<div class="clocks">
+    <canvas id="canvas" width="500" height="500"></canvas>
+</div>
+<script>
+//    let canvas = document.getElementById('canvas');
+//
+//    if (canvas.getContext) {
+//        let context = canvas.getContext('2d');
+//        context.beginPath();
+//
+//        context.arc(100,100,50,0,Math.PI*2,false);
+//        context.fillStyle = "#eee";
+//        context.fill();
+//
+//        context.moveTo(100,100);
+//        context.lineTo(100,60);
+//
+//        context.moveTo(100,100);
+//        context.lineTo(70,100);
+//
+//        context.strokeStyle = "#000";
+//
+//        context.stroke();
+//
+//        context.rotate(1);
+//
+//
+//    }
+
+</script>
+
+<script>
+    window.onload = function () {
+        let canvas = document.getElementById('canvas'),
+                ctx = canvas.getContext('2d'),
+                clockRadius = 250,
+                clockImg = new Image();
+
+        clockImg.src = './timer.png';
+
+        setInterval(drawScene, 1000);
+
+        function clear() {
+            ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
+        }
+
+        function drawScene() {
+            clear();
+
+            let data = new Date(),
+                    hours = data.getHours(),
+                    minutes = data.getMinutes(),
+                    seconds = data.getSeconds();
+
+            hours = hours > 12 ? hours - 12 : hours;
+
+            let hour = hours + minutes / 60;
+            let minute = minutes + seconds / 60;
+
+            ctx.save();
+            ctx.drawImage(clockImg, 0, 0, 500, 500);
+
+            ctx.translate(canvas.width / 2, canvas.height / 2);//translate（x,y）设置x,y，为（0，0）坐标
+            ctx.beginPath();
+
+
+            //画数字
+            ctx.font = '36px Arial';
+            ctx.fillStyle = '#000';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+
+            for (let i = 1; i <= 12; i++) {
+                let theta = (i - 3) * (Math.PI * 2) / 12;
+                let x = clockRadius * 0.7 * Math.cos(theta);
+                let y = clockRadius * 0.7 * Math.sin(theta);
+                ctx.fillText(i, x, y);
+            }
+
+            //画时针
+            ctx.save();
+            let HourHheta = (hour - 3) * 2 * Math.PI / 12;
+            console.log(HourHheta);
+            console.log(hour);
+            ctx.rotate(HourHheta);
+            ctx.beginPath();
+            ctx.moveTo(-20, -6);
+            ctx.lineTo(-20, 6);
+            ctx.lineTo(clockRadius * 0.5, 1);
+            ctx.lineTo(clockRadius * 0.5, -1);
+            ctx.fillStyle = '#BB0606';
+            ctx.fill();
+            ctx.restore();
+
+
+            //画分针
+            ctx.save();
+            let minuteTheta = (minute - 15 ) * 2 * Math.PI / 60;
+            console.log(minuteTheta);
+            ctx.rotate(minuteTheta);
+            ctx.beginPath();
+            ctx.moveTo(-20, -5);
+            ctx.lineTo(-20, 5);
+            ctx.lineTo(clockRadius * 0.7, 1);
+            ctx.lineTo(clockRadius * 0.7, -1);
+            ctx.fillStyle = '#C1BC0C';
+            ctx.fill();
+            ctx.restore();
+
+            //画秒针
+            ctx.save();
+            let secondTheta = (seconds - 15) * 2 * Math.PI / 60;
+            console.log(secondTheta);
+            console.log(seconds);
+            ctx.rotate(secondTheta);
+            ctx.beginPath();
+            ctx.moveTo(-20, -4)
+            ctx.lineTo(-20, 4);
+            ctx.lineTo(clockRadius * 0.9, 1);
+            ctx.lineTo(clockRadius * 0.9, -1);
+            ctx.fillStyle = '#0f0'
+            ctx.fill();
+            ctx.restore();
+
+            ctx.restore();
+
+
+        }
+    }
+//        window.onload  = function () {
+//
+//
+//                let canvas = document.getElementById('canvas'),
+//                    ctx = canvas.getContext('2d'),
+//                    clockRadius = 250,
+//                    hour,minute,seconds,
+//                    clockImg = new Image();
+//                    clockImg.src = './timer.png';
+//
+//
+//
+//                function go () {
+//                    getTime();
+//                    clear();
+//                    drawText();
+//                    drawHour();
+//                    drawMinute();
+//                    drawSecond();
+//
+//                    //ctx.restore();
+//                }
+//
+//                setInterval(go(),1000);
+//
+//                function getTime () {
+//                    let data = new Date(),
+//                        hours = data.getHours(),
+//                        minutes = data.getMinutes();
+//
+//                    seconds = data.getSeconds();
+//                    hours  = hours > 12 ? hours-12 : hours;
+//
+//                    hour = hours + minutes/60;
+//                    minute = minutes + seconds/60;
+//
+//                    ctx.save();
+//                }
+//
+//                function clear () {
+//                    ctx.clearRect(0 , 0 ,canvas.offsetWidth , canvas.offsetHeight);
+//                }
+//
+//                function drawText () {
+//
+//                        ctx.drawImage(clockImg ,0 , 0 ,500 , 500);
+//
+//                        ctx.translate(canvas.width/2 , canvas.height/2);//translate（x,y）设置x,y，为（0，0）坐标
+//                        ctx.beginPath();
+//
+//                        //画数字
+//                        ctx.font = '36px Arial';
+//                        ctx.fillStyle = '#000';
+//                        ctx.textAlign = 'center';
+//                        ctx.textBaseline = 'middle';
+//
+//                        for (let i = 1 ; i<=12 ; i++) {
+//                            let theta = (i-3) * (Math.PI * 2) /12;
+//                            let x = clockRadius*0.7*Math.cos(theta);
+//                            let y = clockRadius* 0.7*Math.sin(theta);
+//                            ctx.fillText(i,x,y);
+//                        }
+//                    }
+//
+//                function drawHour() {
+//                    ctx.save();
+//                    let HourHheta = (hour - 3) * 2*Math.PI/12;
+//                    console.log(HourHheta);
+//                    console.log(hour);
+//                    ctx.rotate(HourHheta);
+//                    ctx.beginPath();
+//                    ctx.moveTo(-20,-6);
+//                    ctx.lineTo(-20,6);
+//                    ctx.lineTo(clockRadius*0.5,1);
+//                    ctx.lineTo(clockRadius*0.5,-1);
+//                    ctx.fillStyle = '#BB0606';
+//                    ctx.fill();
+//                    ctx.restore();
+//                }
+//
+//                function drawMinute () {
+//                    ctx.save();
+//                    let minuteTheta = (minute - 15 ) * 2 * Math.PI / 60;
+//                    console.log(minuteTheta);
+//                    ctx.rotate(minuteTheta);
+//                    ctx.beginPath();
+//                    ctx.moveTo(-20, -5);
+//                    ctx.lineTo(-20, 5);
+//                    ctx.lineTo(clockRadius * 0.7, 1);
+//                    ctx.lineTo(clockRadius * 0.7, -1);
+//                    ctx.fillStyle = '#C1BC0C';
+//                    ctx.fill();
+//                    ctx.restore();
+//                }
+//
+//                function drawSecond() {
+//                    ctx.save();
+//                    let secondTheta = (seconds-15)*2*Math.PI/60;
+//                    console.log(secondTheta);
+//                    console.log(seconds);
+//                    ctx.rotate(secondTheta);
+//                    ctx.beginPath();
+//                    ctx.moveTo(-20,-4)
+//                    ctx.lineTo(-20,4);
+//                    ctx.lineTo(clockRadius*0.9,1);
+//                    ctx.lineTo(clockRadius*0.9,-1);
+//                    ctx.fillStyle = '#0f0'
+//                    ctx.fill();
+//                    ctx.restore();
+//                }
+//
+//
+//        }
+
+</script>
+</body>
+</html>
